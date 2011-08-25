@@ -9,6 +9,8 @@ import org.openstack.atlas.docs.loadbalancers.api.v1.LoadBalancers;
 import org.openstack.atlas.docs.loadbalancers.api.v1.NetworkItem;
 import org.openstack.atlas.docs.loadbalancers.api.v1.AccessList;
 import java.util.ArrayList;
+import org.openstack.atlas.docs.loadbalancers.api.v1.Links;
+import org.openstack.atlas.docs.loadbalancers.api.v1.Link;
 import org.openstack.atlas.docs.loadbalancers.api.v1.Cluster;
 import org.openstack.atlas.docs.loadbalancers.api.v1.LoadBalancer;
 import org.openstack.atlas.docs.loadbalancers.api.v1.VirtualIps;
@@ -98,9 +100,12 @@ public class StubResource extends CommonDependencyProvider {
     @Path("uri")
     public Response uriInfo(){
         String uri = getRequestStateContainer().getUriInfo().getAbsolutePath().toString();
-        SourceAddresses sa = new SourceAddresses();
-        sa.setIpv4Public(uri);
-        return Response.status(200).entity(sa).build();
+        Links links = new Links();
+        Link link = new Link();
+        link.setHref(uri);
+        link.setRel("testRelation");
+        links.getLinks().add(link);
+        return Response.status(200).entity(links).build();
     }
 
     @GET

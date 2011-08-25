@@ -86,7 +86,7 @@ public class ClustersResource extends ManagementDependencyProvider {
                 rcustomer = new Customer();
                 rcustomer.setAccountId(dcustomer.getAccountId());
                 for (org.openstack.atlas.service.domain.entities.LoadBalancer dloadbalancer : dcustomer.getLoadBalancers()) {
-                    rcustomer.getLoadBalancers().getLoadBalancers().add(getDozerMapper().map(dloadbalancer, LoadBalancer.class, "SIMPLE_CUSTOMER_LB"));
+                    rcustomer.getLoadBalancers().add(getDozerMapper().map(dloadbalancer, LoadBalancer.class, "SIMPLE_CUSTOMER_LB"));
                 }
                 rcustomerList.getCustomers().add(rcustomer);
             }

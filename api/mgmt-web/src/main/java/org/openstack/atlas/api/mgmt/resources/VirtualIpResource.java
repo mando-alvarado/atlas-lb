@@ -69,7 +69,7 @@ public class VirtualIpResource extends ManagementDependencyProvider {
                 rPort.setValue(key);
                 for (org.openstack.atlas.service.domain.entities.LoadBalancer dLb : lbList) {
                     rLb = getDozerMapper().map(dLb, LoadBalancer.class);
-                    rPort.getLoadBalancers().getLoadBalancers().add(rLb);
+                    rPort.getLoadBalancers().add(rLb);
                 }
                 rPorts.getPorts().add(rPort);
             }

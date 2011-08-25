@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema elementFormDefault="qualified"
             targetNamespace="http://docs.openstack.org/loadbalancers/api/v1.0"
+            xmlns:atom="http://www.w3.org/2005/Atom"
             xmlns:tns="http://docs.openstack.org/loadbalancers/api/v1.0"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
@@ -10,11 +11,14 @@
 
     <xsd:import schemaLocation="global.xsd" namespace="http://docs.openstack.org/loadbalancers/api/global/v1.0"/>
 
+    <xsd:import schemaLocation="Atom.xsd" 
+         namespace="http://www.w3.org/2005/Atom"/>
+
     <xsd:element name="loadBalancers">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="loadBalancer" type="tns:loadBalancer" minOccurs="0" maxOccurs="unbounded"/>
-                <xsd:element name="links" type="tns:links" minOccurs="0"/>
+                <xsd:element name="links" type="atom:links" minOccurs="0"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -43,7 +47,7 @@
         <xsd:attribute name="status" type="xsd:string"/>
         <xsd:attribute name="isSticky" type="xsd:boolean"/>
     </xsd:complexType>
-
+<!--
     <xsd:element name="links" type="tns:links"/>
     <xsd:complexType name="links">
         <xsd:sequence>
@@ -56,7 +60,7 @@
         <xsd:attribute name="rel" type="xsd:string"/>
         <xsd:attribute name="href" type="xsd:string"/>
     </xsd:complexType>
-
+-->
     <xsd:element name="sourceAddresses" type="tns:sourceAddresses"/>
     <xsd:complexType name="sourceAddresses">
         <xsd:attribute name="ipv4Servicenet" type="xsd:string"/>
