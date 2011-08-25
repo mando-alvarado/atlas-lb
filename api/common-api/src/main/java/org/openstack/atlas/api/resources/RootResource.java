@@ -28,10 +28,10 @@ public class RootResource extends CommonDependencyProvider {
     private ThrowResource throwResource; // Yes for testing
 
     @Path("loadbalancers")
-    public LoadBalancersResource retrieveLoadBalancersResource() {
+    public LoadBalancersResource retrieveLoadBalancersResource(@Context UriInfo uriInfo) {
         this.origContainer.setHttpHeaders(hh);
         this.origContainer.setSecurityContext(sc);
-        this.origContainer.setUriInfo(ui);
+        this.origContainer.setUriInfo(uriInfo);
         this.loadBalancersResource.setRequestHeaders(hh);
         this.loadBalancersResource.setAccountId(accountId);
         return loadBalancersResource;

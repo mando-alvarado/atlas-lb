@@ -22,7 +22,7 @@ public class CommonDependencyProvider {
     protected final static String NOBODY = "Undefined User";
     protected final static String USERHEADERNAME = "X-PP-User";
     protected final static String VFAIL = "Validation Failure";
-    private RequestStateContainer requestStateContainer;
+    protected RequestStateContainer requestStateContainer;
     protected RestApiConfiguration restApiConfiguration;
     protected AsyncService asyncService;
     protected LoadBalancerRepository lbRepository;

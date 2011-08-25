@@ -28,7 +28,7 @@ public class ManagementDependencyProvider {
     private boolean mockitoAuth = false;
     protected final static String VFAIL = "Validation Failure";
     private MossoAuthConfig mossoAuthConfig;
-    private RequestStateContainer requestStateContainer;
+    protected RequestStateContainer requestStateContainer;
     protected ManagementAsyncService managementAsyncService;
     protected AsyncService esbService;
     protected DozerBeanMapper dozerMapper;

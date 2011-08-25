@@ -1,6 +1,7 @@
 package org.openstack.atlas.api.mgmt.resources;
 
 import org.openstack.atlas.docs.loadbalancers.api.management.v1.LoadBalancers;
+import org.openstack.atlas.docs.loadbalancers.api.management.v1.Link;
 import org.openstack.atlas.service.domain.entities.LoadBalancer;
 import org.openstack.atlas.service.domain.management.operations.EsbRequest;
 import org.openstack.atlas.service.domain.operations.Operation;

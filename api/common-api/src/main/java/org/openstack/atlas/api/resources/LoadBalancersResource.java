@@ -1,6 +1,9 @@
 package org.openstack.atlas.api.resources;
 
 
+import org.openstack.atlas.api.helpers.LinkageUriBuilder;
+import org.openstack.atlas.docs.loadbalancers.api.v1.Link;
+import org.openstack.atlas.docs.loadbalancers.api.v1.Links;
 import org.openstack.atlas.docs.loadbalancers.api.v1.AccountBilling;
 import org.openstack.atlas.docs.loadbalancers.api.v1.LimitTypes;
 import org.openstack.atlas.docs.loadbalancers.api.v1.Limits;
@@ -20,8 +23,10 @@ import org.openstack.atlas.api.validation.results.ValidatorResult;
 import org.apache.abdera.model.Feed;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.util.*;
 
 import static org.openstack.atlas.service.domain.operations.Operation.BATCH_DELETE_LOADBALANCER;
@@ -43,7 +48,7 @@ public class LoadBalancersResource extends CommonDependencyProvider {
 
     @GET
     @Produces({APPLICATION_XML, APPLICATION_JSON, APPLICATION_ATOM_XML})
-    public Response retrieveLoadBalancers(@QueryParam("status") String status, @QueryParam("offset") Integer offset, @QueryParam("limit") Integer limit, @QueryParam("marker") Integer marker, @QueryParam("page") Integer page, @QueryParam("changes-since") String changedSince) {
+    public Response retrieveLoadBalancers(@Context UriInfo uriInfo, @QueryParam("status") String status, @QueryParam("offset") Integer offset, @QueryParam("limit") Integer limit, @QueryParam("marker") Integer marker, @QueryParam("page") Integer page, @QueryParam("changes-since") String changedSince) {
         if (requestHeaders.getRequestHeader("Accept").get(0).equals(APPLICATION_ATOM_XML)) {
             return getFeedResponse(page);
         }
@@ -74,6 +79,7 @@ public class LoadBalancersResource extends CommonDependencyProvider {
             for (org.openstack.atlas.service.domain.entities.LoadBalancer domainLb : domainLbs) {
                 dataModelLbs.getLoadBalancers().add(dozerMapper.map(domainLb, org.openstack.atlas.docs.loadbalancers.api.v1.LoadBalancer.class, "SIMPLE_LB"));
             }
+            dataModelLbs.setLinks(LinkageUriBuilder.buildLinks(uriInfo, domainLbs, limit, marker));
             return Response.status(200).entity(dataModelLbs).build();
         } catch (Exception e) {
             return ResponseFactory.getErrorResponse(e, null, null);
