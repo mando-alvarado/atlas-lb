@@ -25,17 +25,17 @@ public class LinkageUriBuilder {
             UriBuilder uriBuilderself = buildUri(uriInfo, (limit), (marker));
 
             Link nextLink = new Link();
-            nextLink.setHref(uriBuilderNext.toString());
+            nextLink.setHref(uriBuilderNext.build().toString());
             nextLink.setRel(NEXT);
             links.add(nextLink);
 
             Link previousLink = new Link();
-            previousLink.setHref(uriBuilderPrevious.toString());
+            previousLink.setHref(uriBuilderPrevious.build().toString());
             previousLink.setRel(PREVIOUS);
             links.add(previousLink);
 
             Link selfLink = new Link();
-            selfLink.setHref(uriBuilderself.toString());
+            selfLink.setHref(uriBuilderself.build().toString());
             selfLink.setRel(SELF);
             links.add(selfLink);
         } else {
