@@ -31,7 +31,7 @@ public class RootResourceTest {
             RequestStateContainer mockedRequestStateContainer = mock(RequestStateContainer.class);
             rootResource.setOrigContainer(mockedRequestStateContainer);
             rootResource.setLoadBalancersResource(mockedLoadBalancersResource);
-            rootResource.retrieveLoadBalancersResource(null);
+            rootResource.retrieveLoadBalancersResource();
             verify(mockedRequestStateContainer).setHttpHeaders(Matchers.<HttpHeaders>any());
             verify(mockedRequestStateContainer).setSecurityContext(Matchers.<SecurityContext>any());
             verify(mockedRequestStateContainer).setUriInfo(Matchers.<UriInfo>any());

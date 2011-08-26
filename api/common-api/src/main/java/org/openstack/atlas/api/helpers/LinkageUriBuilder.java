@@ -1,6 +1,7 @@
 package org.openstack.atlas.api.helpers;
 
 import org.openstack.atlas.docs.loadbalancers.api.v1.Link;
+import org.openstack.atlas.docs.loadbalancers.api.v1.LoadBalancer;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -20,8 +21,12 @@ public class LinkageUriBuilder {
         List<Link> links = new ArrayList<Link>();
 
         if (objects.size() > 0) {
+            for (Object ob : objects) {
+               LoadBalancer lb = (LoadBalancer) ob;
+                lb.getId();
+            }
             UriBuilder uriBuilderNext = buildUri(uriInfo, (limit), (limit + marker));
-            UriBuilder uriBuilderPrevious = buildUri(uriInfo, (limit), (limit - marker));
+            UriBuilder uriBuilderPrevious = buildUri(uriInfo, (limit), (limit - limit));
             UriBuilder uriBuilderself = buildUri(uriInfo, (limit), (marker));
 
             Link nextLink = new Link();
@@ -49,6 +54,6 @@ public class LinkageUriBuilder {
     }
 
     private static UriBuilder buildUri(UriInfo uriInfo, Integer limit, Integer marker) {
-        return uriInfo.getAbsolutePathBuilder().queryParam("limit", limit, "marker", marker);
+        return uriInfo.getAbsolutePathBuilder().replaceQuery("marker=" + marker + "&limit=" + limit);
     }
 }
