@@ -10,23 +10,21 @@ import java.rmi.UnexpectedException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public class LinkageUriBuilder {
     private final static String NEXT = "next";
     private final static String PREVIOUS = "previous";
     private final static String SELF = "self";
 
-    public static List<Link> buildLinks(UriInfo uriInfo, Collection<?> objects, Integer limit, Integer marker) throws UnexpectedException {
+    public static List<Link> buildLinks(UriInfo uriInfo, List<Integer> idList, Integer limit, Integer marker) throws UnexpectedException {
 
         List<Link> links = new ArrayList<Link>();
 
-        if (objects.size() > 0) {
-            for (Object ob : objects) {
-               LoadBalancer lb = (LoadBalancer) ob;
-                lb.getId();
-            }
-            UriBuilder uriBuilderNext = buildUri(uriInfo, (limit), (limit + marker));
-            UriBuilder uriBuilderPrevious = buildUri(uriInfo, (limit), (limit - limit));
+        if (idList.size() > 0) {
+
+            UriBuilder uriBuilderNext = buildUri(uriInfo, (limit), (idList.get(idList.size() - 1)));
+            UriBuilder uriBuilderPrevious = buildUri(uriInfo, (limit), (idList.get(0)));
             UriBuilder uriBuilderself = buildUri(uriInfo, (limit), (marker));
 
             Link nextLink = new Link();

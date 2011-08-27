@@ -414,6 +414,8 @@ public class LoadBalancerRepository {
         String qStr;
         Query q;
         cq = new CustomQuery(selectClause);
+//        cq.addOrderdBy("lb.id", "desc");
+
         if (accountId != null) {
             cq.addParam("lb.accountId", "=", "accountId", accountId);
         }

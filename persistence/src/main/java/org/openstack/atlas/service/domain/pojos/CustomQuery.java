@@ -12,6 +12,8 @@ public class CustomQuery {
     private Integer limit;
     private Integer offset;
     private String WherePrefix = " WHERE ";
+    private String OrderByPrefix = " ORDER BY ";
+    private String orderedByQuery;
 
     public CustomQuery() {
     }
@@ -53,6 +55,15 @@ public class CustomQuery {
         queryParameters.add(param);
     }
 
+    public String addOrderdBy(String orderByValue, String option) {
+        StringBuffer orderBy = new StringBuffer(strInitSize);
+        orderBy.append(OrderByPrefix);
+        orderBy.append(orderByValue);
+        orderBy.append(" ");
+        orderBy.append(option);
+        return orderedByQuery = orderBy.toString();
+    }
+
     public String getQueryString() {
         String frm;
         String qStr;
@@ -73,7 +84,8 @@ public class CustomQuery {
             }
             where.append(qStr);
         }
-        out = String.format("%s%s", selectClause, where.toString());
+        if (orderedByQuery == null) orderedByQuery = "";
+        out = String.format("%s%s%s", selectClause, where.toString(), orderedByQuery);
         return out;
     }
 
@@ -135,5 +147,21 @@ public class CustomQuery {
 
     public void setWherePrefix(String WherePrefix) {
         this.WherePrefix = WherePrefix;
+    }
+
+    public String getOrderByPrefix() {
+        return OrderByPrefix;
+    }
+
+    public void setOrderByPrefix(String orderByPrefix) {
+        OrderByPrefix = orderByPrefix;
+    }
+
+    public String getOrderedByQuery() {
+        return orderedByQuery;
+    }
+
+    public void setOrderedByQuery(String orderedByQuery) {
+        this.orderedByQuery = orderedByQuery;
     }
 }

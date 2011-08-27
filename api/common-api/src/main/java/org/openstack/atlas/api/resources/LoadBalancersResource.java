@@ -76,10 +76,14 @@ public class LoadBalancersResource extends CommonDependencyProvider {
 
             domainLbs = loadBalancerService.getLoadbalancersGeneric(accountId, status, qs, changedCal, offset, limit, marker);
 
+            List<Integer> idList = new ArrayList<Integer>();
             for (org.openstack.atlas.service.domain.entities.LoadBalancer domainLb : domainLbs) {
                 dataModelLbs.getLoadBalancers().add(dozerMapper.map(domainLb, org.openstack.atlas.docs.loadbalancers.api.v1.LoadBalancer.class, "SIMPLE_LB"));
+                //Populate the id list
+                idList.add(domainLb.getId());
             }
-            dataModelLbs.setLinks(LinkageUriBuilder.buildLinks(uriInfo, domainLbs, limit, marker));
+
+            dataModelLbs.setLinks(LinkageUriBuilder.buildLinks(uriInfo, idList, limit, marker));
             return Response.status(200).entity(dataModelLbs).build();
         } catch (Exception e) {
             return ResponseFactory.getErrorResponse(e, null, null);
