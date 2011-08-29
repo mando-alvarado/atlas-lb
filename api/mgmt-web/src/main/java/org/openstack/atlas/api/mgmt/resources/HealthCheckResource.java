@@ -1,9 +1,11 @@
 package org.openstack.atlas.api.mgmt.resources;
 
+import org.openstack.atlas.adapter.service.ReverseProxyLoadBalancerAdapter;
 import org.openstack.atlas.api.config.PublicApiServiceConfigurationKeys;
 import org.openstack.atlas.api.mgmt.resources.providers.ManagementDependencyProvider;
 import org.openstack.atlas.docs.loadbalancers.api.management.v1.HealthCheck;
 import org.openstack.atlas.docs.loadbalancers.api.management.v1.HealthChecks;
+import org.openstack.atlas.service.domain.entities.Host;
 import org.openstack.atlas.service.domain.exceptions.EntityNotFoundException;
 
 import javax.ws.rs.GET;
@@ -12,6 +14,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 public class HealthCheckResource extends ManagementDependencyProvider {
+
+    protected ReverseProxyLoadBalancerAdapter reverseProxyLoadBalancerAdapter;
 
     @GET
     public Response getHealthCheck() throws EntityNotFoundException {
@@ -30,10 +34,19 @@ public class HealthCheckResource extends ManagementDependencyProvider {
         check.setStatus("ACTIVE");
         Long time = System.currentTimeMillis();
         try {
-            reverseProxyLoadBalancerService.getSubnetMappings(hostRepository.getDefaultActiveHost());
+            Host host;
+            try {
+                host = hostService.getDefaultActiveHost();
+            } catch (Exception e) {
+                check.setStatus("UNKNOWN");
+                check.setMessage("Database inactive, unable to determine status of zeus.");
+                check.setTime(System.currentTimeMillis() - time);
+                return check;
+            }
+            reverseProxyLoadBalancerService.getSubnetMappings(host);
         } catch (Exception e) {
-            check.setMessage(e.getMessage());
             check.setStatus("INACTIVE");
+            check.setMessage(e.getMessage());
         }
         check.setTime(System.currentTimeMillis() - time);
         return check;
