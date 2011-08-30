@@ -70,10 +70,6 @@ public class LoadBalancersResource extends CommonDependencyProvider {
                 changedCal = isoTocal(changedSince);
             }
 
-            if (limit == null || limit < 0 || limit > 100) {
-                limit = 100;
-            }
-
             domainLbs = loadBalancerService.getLoadbalancersGeneric(accountId, status, qs, changedCal, offset, limit, marker);
 
             List<Integer> idList = new ArrayList<Integer>();

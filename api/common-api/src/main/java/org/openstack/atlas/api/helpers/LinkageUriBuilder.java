@@ -16,13 +16,21 @@ public class LinkageUriBuilder {
     private final static String NEXT = "next";
     private final static String PREVIOUS = "previous";
     private final static String SELF = "self";
+    private final static Integer HARD_LIMIT = 100;
+    private final static Integer HARD_MARKER = 0;
 
     public static List<Link> buildLinks(UriInfo uriInfo, List<Integer> idList, Integer limit, Integer marker) throws UnexpectedException {
 
+        if (limit == null || limit < 0 || limit > 100) {
+            limit = HARD_LIMIT;
+        }
+
+        if (marker == null) {
+            marker = HARD_MARKER;
+        }
+
         List<Link> links = new ArrayList<Link>();
-
         if (idList.size() > 0) {
-
             UriBuilder uriBuilderNext = buildUri(uriInfo, (limit), (idList.get(idList.size() - 1)));
             UriBuilder uriBuilderPrevious = buildUri(uriInfo, (limit), (idList.get(0)));
             UriBuilder uriBuilderself = buildUri(uriInfo, (limit), (marker));
