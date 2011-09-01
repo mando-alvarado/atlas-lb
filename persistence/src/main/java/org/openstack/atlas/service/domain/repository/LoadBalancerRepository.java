@@ -418,8 +418,8 @@ public class LoadBalancerRepository {
             Creating Links... Comment blocks mark where Intern was working
          */
 
-        String firstQuery = "SELECT lb FROM LoadBalancer lb WHERE lb.account_id = :account AND lb.id < :mark ORDER BY id DESC LIMIT 1 OFFSET :offset";
-        lbs = (entityManager.createQuery(firstQuery).setParameter("account", accountId).setParameter("mark", marker).setParameter("offset", limit).getResultList());
+        String firstQuery = "SELECT lb FROM LoadBalancer lb WHERE lb.accountId = :account AND lb.id < :mark ORDER BY id DESC";
+        lbs.addAll(entityManager.createQuery(firstQuery).setParameter("account", accountId).setParameter("mark", marker).setFirstResult(limit).setMaxResults(1).getResultList());
 
         /*
             End first set
