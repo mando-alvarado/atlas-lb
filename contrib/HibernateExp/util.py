@@ -81,8 +81,10 @@ import java.util.Set
 import java.util.HashSet
 import java.lang.Integer
 import java.lang.String
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.regex.Pattern as Pattern
+import java.util.regex.Matcher as Matcher
 
 import org.openstack.atlas.service.domain.pojos.CustomQuery as CustomQuery
 import org.openstack.atlas.service.domain.pojos.QueryParameter as QueryParameter
@@ -102,6 +104,8 @@ import os
 import string
 import random
 import re
+
+import com.zxtm.service.client.CatalogMonitorType as CatalogMonitorType
 
 import traceback
 
@@ -156,7 +160,14 @@ stubs = None
 
 app = HuApp()
 
-#select v.id,v.ip_address,lv.loadbalancer_id,l.account_id from virtual_ip_ipv4 v left join loadbalancer_virtualip lv on v.id = lv.virtualip_id join loadbalancer l on lv.loadbalancer_id = l.id order by v.id;
+def groupmatch(pattern_str,test_str):
+    out = []
+    p = Pattern.compile(pattern_str)
+    m = p.matcher(test_str)
+    m.find()
+    for i in xrange(0,m.groupCount()+1):
+        out.append(m.group(i))
+    return tuple(out)
 
 class ZxtmStubs(object):
     stubMap = {
@@ -164,7 +175,8 @@ class ZxtmStubs(object):
                "p" :"getPoolBinding",
                "pc":"getProtectionBinding",
                "tg":"getTrafficIpGroupBinding",
-               "vs":"getVirtualServerBinding"
+               "vs":"getVirtualServerBinding",
+               "m":"getMonitorBinding"
 }
 
     def __init__(self,endpoints,user,passwd):
