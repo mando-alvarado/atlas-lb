@@ -478,6 +478,11 @@ public class LoadBalancerRepository {
         }
 
         lbs.addAll(query.getResultList());
+        /*
+            The above line used to be the following:
+            
+            lbs = query.getResultList();
+         */
 
         return lbs;
     }
