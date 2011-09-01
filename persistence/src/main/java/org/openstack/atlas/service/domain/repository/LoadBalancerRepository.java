@@ -400,75 +400,84 @@ public class LoadBalancerRepository {
         return vips;
     }
 
-    public List<LoadBalancer> getLoadbalancersGeneric(Integer accountId,
-            String status, LbQueryStatus queryStatus, Calendar changedSince,
-            Integer offset, Integer limit, Integer marker) throws BadRequestException {
+    public List<LoadBalancer> getLoadbalancersGeneric(Integer accountId, String status, LbQueryStatus queryStatus, Calendar changedSince, Integer offset, Integer limit, Integer marker) throws BadRequestException {
         List<LoadBalancer> lbs = new ArrayList<LoadBalancer>();
         LoadBalancerStatus lbStatus;
         String selectClause;
         String format;
-        CustomQuery cq;
-        String msg;
+        CustomQuery customQuery;
+        String message;
         selectClause = "SELECT lb FROM LoadBalancer lb";
-        String op;
-        String qStr;
-        Query q;
-        cq = new CustomQuery(selectClause);
+        String operation;
+        String queryString;
+        Query query;
+        customQuery = new CustomQuery(selectClause);
 //        cq.addOrderdBy("lb.id", "desc");
 
+        /*
+            Creating Links... Comment blocks mark where Intern was working
+         */
+
+        String firstQuery = "SELECT lb FROM LoadBalancer lb WHERE lb.account_id = :account AND lb.id < :mark ORDER BY id DESC LIMIT 1 OFFSET :offset";
+        lbs = (entityManager.createQuery(firstQuery).setParameter("account", accountId).setParameter("mark", marker).setParameter("offset", limit).getResultList());
+
+        /*
+            End first set
+         */
+
         if (accountId != null) {
-            cq.addParam("lb.accountId", "=", "accountId", accountId);
+            customQuery.addParam("lb.accountId", "=", "accountId", accountId);
         }
 
         if (queryStatus != null && status != null) {
             try {
                 lbStatus = LoadBalancerStatus.valueOf(status);
             } catch (IllegalArgumentException e) {
-                msg = String.format("%s is not a valid LoadBalancer status", status);
-                throw new BadRequestException(msg);
+                message = String.format("%s is not a valid LoadBalancer status", status);
+                throw new BadRequestException(message);
             }
             switch (queryStatus) {
                 case EXCLUDE:
-                    op = "!=";
+                    operation = "!=";
                     break;
                 case INCLUDE:
-                    op = "=";
+                    operation = "=";
                     break;
                 default:
                     format = "QueryStatus %s must be INCLUDE or EXCLUDE or null";
-                    msg = String.format(format, queryStatus.name());
-                    throw new BadRequestException(msg);
+                    message = String.format(format, queryStatus.name());
+                    throw new BadRequestException(message);
             }
-            cq.addParam("lb.status", op, "status", lbStatus);
+            customQuery.addParam("lb.status", operation, "status", lbStatus);
         }
 
         if (changedSince != null) {
-            cq.addParam("lb.updated", ">=", "updated", changedSince);
+            customQuery.addParam("lb.updated", ">=", "updated", changedSince);
         }
 
         if (marker != null) {
-            cq.addParam("lb.id", ">=", "marker", marker);
+            customQuery.addParam("lb.id", ">=", "marker", marker);
         }
 
-        qStr = cq.getQueryString();
+        queryString = customQuery.getQueryString();
 
-        q = entityManager.createQuery(qStr);
+        query = entityManager.createQuery(queryString);
 
-        for (QueryParameter param : cq.getQueryParameters()) {
-            q.setParameter(param.getPname(), param.getValue());
+        for (QueryParameter param : customQuery.getQueryParameters()) {
+            query.setParameter(param.getPname(), param.getValue());
         }
 
         if (limit != null) {
-            cq.setLimit(limit);
-            q.setMaxResults(cq.getLimit());
+            customQuery.setLimit(limit);
+            query.setMaxResults(customQuery.getLimit());
         }
 
         if (offset != null) {
-            cq.setOffset(offset);
-            q.setFirstResult(cq.getOffset());
+            customQuery.setOffset(offset);
+            query.setFirstResult(customQuery.getOffset());
         }
 
-        lbs = q.getResultList();
+        lbs.addAll(query.getResultList());
 
         return lbs;
     }
