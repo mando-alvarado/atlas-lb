@@ -414,16 +414,13 @@ public class LoadBalancerRepository {
         customQuery = new CustomQuery(selectClause);
 //        cq.addOrderdBy("lb.id", "desc");
 
-        /*
-            Creating Links... Comment blocks mark where Intern was working
-         */
-
-        String firstQuery = "SELECT lb FROM LoadBalancer lb WHERE lb.accountId = :account AND lb.id < :mark ORDER BY id DESC";
-        lbs.addAll(entityManager.createQuery(firstQuery).setParameter("account", accountId).setParameter("mark", marker).setFirstResult(limit).setMaxResults(1).getResultList());
-
-        /*
-            End first set
-         */
+        // Trying to make the first element in the return list be the "prev" link element
+        if (marker != null) {
+            String firstQuery = "SELECT lb FROM LoadBalancer lb WHERE lb.accountId = :account AND lb.id <= :marker ORDER BY id DESC";
+            lbs.addAll(entityManager.createQuery(firstQuery).setParameter("account", accountId).setParameter("marker", marker).setFirstResult(1).setMaxResults(1).getResultList());
+        } else {
+            marker = 0;
+        }
 
         if (accountId != null) {
             customQuery.addParam("lb.accountId", "=", "accountId", accountId);
@@ -455,10 +452,7 @@ public class LoadBalancerRepository {
             customQuery.addParam("lb.updated", ">=", "updated", changedSince);
         }
 
-        if (marker != null) {
-            customQuery.addParam("lb.id", ">=", "marker", marker);
-        }
-
+        customQuery.addParam("lb.id", ">=", "marker", marker);
         queryString = customQuery.getQueryString();
 
         query = entityManager.createQuery(queryString);
@@ -468,7 +462,7 @@ public class LoadBalancerRepository {
         }
 
         if (limit != null) {
-            customQuery.setLimit(limit);
+            customQuery.setLimit(limit + 1);
             query.setMaxResults(customQuery.getLimit());
         }
 
