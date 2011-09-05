@@ -28,6 +28,9 @@ stubs.vs.setErrorFile(httpvs, errorfiles)
 
 
 pattern_str = r"<([A-Z][A-Z0-9]*)\b[^>]*>(.*?)</\1>"
+
+
+pattern_str = r".*"
 p = Pattern.compile(pattern_str)
 
 
@@ -38,5 +41,5 @@ stubs.m.setStatusRegex([mn],[r".*"])
 stubs.m.setPath([mn],[r"/blah"])
 stubs.m.setBodyRegex([mn],[pattern_str])
 #borkage above
-stubs.p.setMonitors([mn],[mn])
+stubs.p.setMonitors([mn],[[mn]])
 
