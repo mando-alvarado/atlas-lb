@@ -30,9 +30,6 @@ public class LinkageUriBuilder {
 
             Boolean prev = true;
             Boolean next = true;
-            if (marker.equals(0)) {
-                marker = idList.get(0);
-            }
 
             if (marker.equals(idList.get(0))) {
                 prev = false;

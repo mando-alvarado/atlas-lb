@@ -417,7 +417,10 @@ public class LoadBalancerRepository {
         // Trying to make the first element in the return list be the "prev" link element
         if (marker != null) {
             String firstQuery = "SELECT lb FROM LoadBalancer lb WHERE lb.accountId = :account AND lb.id <= :marker ORDER BY id DESC";
-            lbs.addAll(entityManager.createQuery(firstQuery).setParameter("account", accountId).setParameter("marker", marker).setFirstResult(1).setMaxResults(1).getResultList());
+            lbs.addAll(entityManager.createQuery(firstQuery).setParameter("account", accountId).setParameter("marker", marker).setFirstResult(limit).setMaxResults(1).getResultList());
+            if (lbs.size() < 1) {
+                lbs.add(new LoadBalancer());
+            }
         } else {
             marker = 0;
         }
@@ -472,11 +475,7 @@ public class LoadBalancerRepository {
         }
 
         lbs.addAll(query.getResultList());
-        /*
-            The above line used to be the following:
-            
-            lbs = query.getResultList();
-         */
+//      was: lbs = query.getResultList();
 
         return lbs;
     }

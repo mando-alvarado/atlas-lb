@@ -1,9 +1,14 @@
 package org.openstack.atlas.api.resources;
 
 
+import org.apache.abdera.model.Feed;
 import org.openstack.atlas.api.helpers.LinkageUriBuilder;
-import org.openstack.atlas.docs.loadbalancers.api.v1.Link;
-import org.openstack.atlas.docs.loadbalancers.api.v1.Links;
+import org.openstack.atlas.api.helpers.ResponseFactory;
+import org.openstack.atlas.api.mapper.DomainToRestModel;
+import org.openstack.atlas.api.repository.ValidatorRepository;
+import org.openstack.atlas.api.resources.providers.CommonDependencyProvider;
+import org.openstack.atlas.api.validation.context.HttpRequestType;
+import org.openstack.atlas.api.validation.results.ValidatorResult;
 import org.openstack.atlas.docs.loadbalancers.api.v1.AccountBilling;
 import org.openstack.atlas.docs.loadbalancers.api.v1.LimitTypes;
 import org.openstack.atlas.docs.loadbalancers.api.v1.Limits;
@@ -13,14 +18,7 @@ import org.openstack.atlas.service.domain.entities.LimitType;
 import org.openstack.atlas.service.domain.exceptions.BadRequestException;
 import org.openstack.atlas.service.domain.pojos.LbQueryStatus;
 import org.openstack.atlas.service.domain.pojos.MessageDataContainer;
-import org.openstack.atlas.api.helpers.ResponseFactory;
-import org.openstack.atlas.api.mapper.DomainToRestModel;
-import org.openstack.atlas.api.repository.ValidatorRepository;
-import org.openstack.atlas.api.resources.providers.CommonDependencyProvider;
-import org.openstack.atlas.api.validation.context.HttpRequestType;
 import org.openstack.atlas.util.converters.exceptions.ConverterException;
-import org.openstack.atlas.api.validation.results.ValidatorResult;
-import org.apache.abdera.model.Feed;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -29,12 +27,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.*;
 
+import static javax.ws.rs.core.MediaType.*;
+import static org.openstack.atlas.api.atom.FeedType.PARENT_FEED;
 import static org.openstack.atlas.service.domain.operations.Operation.BATCH_DELETE_LOADBALANCER;
 import static org.openstack.atlas.service.domain.operations.Operation.CREATE_LOADBALANCER;
 import static org.openstack.atlas.service.domain.util.Constants.NUM_DAYS_OF_USAGE;
-import static org.openstack.atlas.api.atom.FeedType.PARENT_FEED;
 import static org.openstack.atlas.util.converters.DateTimeConverters.isoTocal;
-import static javax.ws.rs.core.MediaType.*;
 
 public class LoadBalancersResource extends CommonDependencyProvider {
 
@@ -69,6 +67,8 @@ public class LoadBalancersResource extends CommonDependencyProvider {
             if (changedSince != null) {
                 changedCal = isoTocal(changedSince);
             }
+
+            Map<List<Integer>, List<org.openstack.atlas.service.domain.entities.LoadBalancer>> loadbalancerAndLinksMap = new HashMap<List<Integer>, List<org.openstack.atlas.service.domain.entities.LoadBalancer>>();
 
             domainLbs = loadBalancerService.getLoadbalancersGeneric(accountId, status, qs, changedCal, offset, limit, marker);
 
