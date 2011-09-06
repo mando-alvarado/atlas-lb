@@ -15,7 +15,7 @@ public class LinkageUriBuilder {
     private final static Integer HARD_LIMIT = 100;
     private final static Integer HARD_MARKER = 0;
 
-    public static List<Link> buildLinks(UriInfo uriInfo, List<Integer> idList, Integer limit, Integer marker) throws UnexpectedException {
+    public static List<Link> buildLinks(UriInfo uriInfo, List<Integer> idList, List<Integer> pagilbIds, Integer limit, Integer marker) throws UnexpectedException {
 
         if (limit == null || limit < 0 || limit > 100) {
             limit = HARD_LIMIT;
@@ -35,12 +35,17 @@ public class LinkageUriBuilder {
                 prev = false;
             }
             
-            if (idList.size() < limit) {
+            if (marker.equals(idList.get(idList.size() - 1))) {
                 next = false;
             }
 
             if (next) {
-                UriBuilder uriBuilderNext = buildUri(uriInfo, (limit), null/*replace with correct marker*/);
+                int pointer;
+                if (marker.equals(0)) {
+                   marker = idList.get(idList.indexOf(pagilbIds.get(pagilbIds.size() - 1)));
+                }
+
+                UriBuilder uriBuilderNext = buildUri(uriInfo, (limit), (marker + limit));
                 Link nextLink = new Link();
                 nextLink.setHref(uriBuilderNext.build().toString());
                 nextLink.setRel(NEXT);
@@ -48,20 +53,15 @@ public class LinkageUriBuilder {
             }
 
             if (prev) {
-                UriBuilder uriBuilderPrevious = buildUri(uriInfo, (limit), (idList.indexOf(marker) - limit));
+                UriBuilder uriBuilderPrevious = buildUri(uriInfo, (limit), (idList.get(idList.indexOf(marker) - limit)));
                 Link previousLink = new Link();
                 previousLink.setHref(uriBuilderPrevious.build().toString());
                 previousLink.setRel(PREVIOUS);
                 links.add(previousLink);
             }
 
-            UriBuilder uriBuilderself = buildUri(uriInfo, (limit), (marker));
-            Link selfLink = new Link();
-            selfLink.setHref(uriBuilderself.build().toString());
-            selfLink.setRel(SELF);
-            links.add(selfLink);
         } else {
-            throw new UnexpectedException("Something happened!");
+            throw new UnexpectedException("The list is empty");
         }
         return links;
     }

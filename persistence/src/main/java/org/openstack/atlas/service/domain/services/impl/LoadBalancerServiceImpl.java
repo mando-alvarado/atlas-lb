@@ -263,6 +263,11 @@ public class LoadBalancerServiceImpl extends BaseService implements LoadBalancer
     }
 
     @Override
+    public List<Integer> getLoadBalancerIds(Integer accountId) {
+       return loadBalancerRepository.getLoadBalancerIds(accountId);
+    }
+
+    @Override
     @Transactional
      public Suspension createSuspension(LoadBalancer loadBalancer, Suspension suspension) {
         return loadBalancerRepository.createSuspension(loadBalancer, suspension);

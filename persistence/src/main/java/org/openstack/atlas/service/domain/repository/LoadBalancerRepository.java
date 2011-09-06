@@ -465,7 +465,7 @@ public class LoadBalancerRepository {
         }
 
         if (limit != null) {
-            customQuery.setLimit(limit + 1);
+            customQuery.setLimit(limit);
             query.setMaxResults(customQuery.getLimit());
         }
 
@@ -527,6 +527,11 @@ public class LoadBalancerRepository {
         }
         loadbalancers = query.getResultList();
         return loadbalancers;
+    }
+
+    public List<Integer> getLoadBalancerIds(Integer accountId) {
+        Query query = entityManager.createQuery("SELECT lb.id FROM LoadBalancer lb WHERE lb.accountId = :accountId").setParameter("accountId", accountId);
+        return query.getResultList();
     }
 
     // For Jira https://jira.mosso.com/browse/SITESLB-220
