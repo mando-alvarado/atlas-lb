@@ -46,6 +46,7 @@ public class StubResource extends CommonDependencyProvider {
     @GET
     @Path("loadbalancers")
     public Response stubLoadBalancers() {
+        Link lnk;
         LoadBalancers loadbalancers = new LoadBalancers();
         loadbalancers.getLoadBalancers().add(newLoadBalancer(1, "LB1"));
         loadbalancers.getLoadBalancers().add(newLoadBalancer(2, "LB2"));

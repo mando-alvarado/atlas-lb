@@ -11,6 +11,8 @@ import org.openstack.atlas.api.helpers.JsonDeserializer.DateTimeDeserializer;
 
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.openstack.atlas.api.helpers.JsonSerializer.PropertyCollectionMapper.ElementClass;
+import org.openstack.atlas.api.helpers.JsonSerializer.PropertyCollectionMapper;
 import org.codehaus.jackson.map.SerializationConfig;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.ser.CustomSerializerFactory;
@@ -31,6 +33,8 @@ import org.openstack.atlas.api.helpers.JsonDeserializer.DeserializerProviderBuil
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Map;
+import java.util.HashMap;
 
 public class JsonObjectMapper extends ObjectMapper {
 
@@ -39,7 +43,7 @@ public class JsonObjectMapper extends ObjectMapper {
         //this.configure(SerializationConfig.Feature.WRITE_DATES_AS_TIMESTAMPS, false);
         //this.getSerializationConfig().setDateFormat(df);
         //this.getDeserializationConfig().setDateFormat(df);
-
+        Map<String,ElementClass> classMap;
         CustomSerializerFactory csf = new CustomSerializerFactory();
         CustomDeserializerFactory cdf = new CustomDeserializerFactory();
         SerializationConfig serConf = this.getSerializationConfig();
@@ -78,7 +82,11 @@ public class JsonObjectMapper extends ObjectMapper {
         // wrapped, but none of the collections within loadbalancer.
 
         csf.addSpecificMapping(LoadBalancer.class, new ObjectWrapperSerializer(this.getSerializationConfig(), LoadBalancer.class));
-        csf.addSpecificMapping(LoadBalancers.class, new PropertyCollectionSerializer(serConf, LoadBalancers.class, "getLoadBalancers"));
+        //csf.addSpecificMapping(LoadBalancers.class, new PropertyCollectionSerializer(serConf, LoadBalancers.class, "getLoadBalancers"));
+        classMap = new HashMap<String,ElementClass>();
+        classMap.put("getLoadBalancers",new ElementClass("getLoadBalacners", "loadBalancers"));
+        classMap.put("getLinks",new ElementClass("getLinks", "links"));
+        csf.addSpecificMapping(LoadBalancers.class, new PropertyCollectionMapper(serConf, classMap));
 
         csf.addSpecificMapping(AccessList.class, new PropertyCollectionSerializer(serConf, AccessList.class, "getNetworkItems"));
         csf.addSpecificMapping(Nodes.class, new PropertyCollectionSerializer(serConf, Nodes.class, "getNodes"));

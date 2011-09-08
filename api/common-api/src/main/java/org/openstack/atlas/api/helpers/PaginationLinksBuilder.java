@@ -47,7 +47,7 @@ public class PaginationLinksBuilder {
                 try {
                     uriBuilderPrevious = buildUri(uriInfo, (limit), allObjectIds.get(firstId - limit));
                 } catch (IndexOutOfBoundsException ex) {
-                    uriBuilderPrevious = buildUri(uriInfo, (limit), allObjectIds.get(firstId));
+                    uriBuilderPrevious = buildUri(uriInfo, (limit), allObjectIds.get(0));
                 }
 
                 Link previousLink = new Link();

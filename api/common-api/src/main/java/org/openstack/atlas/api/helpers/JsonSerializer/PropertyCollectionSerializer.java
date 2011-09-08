@@ -16,23 +16,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import org.codehaus.jackson.map.ser.CustomSerializerFactory;
 
-/***
- * This serializer overrides any custom serializers defined for types via a
- * CustomSerializerFactory (or similar) and uses the BeanSerializerFactory for
- * serializing types. It also creates a clean SerializerProvider, which ensures
- * that any previously registered custom serializers are not used. This
- * particular serializer is really valuable when you want collections to be
- * serialized naturally and single objects to be serialized differently (e.g.
- * with a wrapper).
- *
- * Optionally, a wrapperFieldName can be supplied that will be used to write a
- * wrapping object around the JSON output.
- *
- * @author jodom
- *
- */
-
-
 public class PropertyCollectionSerializer extends JsonSerializer<Object> {
 
     private SerializationConfig config;
@@ -65,10 +48,6 @@ public class PropertyCollectionSerializer extends JsonSerializer<Object> {
             errMsg = String.format(format, valClassName, getterName, value.toString());
             throw new org.codehaus.jackson.JsonGenerationException(errMsg, ex);
         }
-
-        CustomSerializerFactory csf = new CustomSerializerFactory();
-        csf.addSpecificMapping(GregorianCalendar.class, new DateTimeSerializer(config,null));
-
 
         if (this.wrapperFieldName != null) {
             jgen.writeStartObject();
