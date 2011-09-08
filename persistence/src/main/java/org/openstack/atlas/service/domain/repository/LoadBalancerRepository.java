@@ -531,7 +531,7 @@ public class LoadBalancerRepository {
     }
 
     public List<Integer> getLoadBalancerIds(Integer accountId) {
-        Query query = entityManager.createQuery("SELECT lb.id FROM LoadBalancer lb WHERE lb.accountId = :accountId").setParameter("accountId", accountId);
+        Query query = entityManager.createQuery("SELECT lb.id FROM LoadBalancer lb WHERE lb.status != 'DELETED' and lb.accountId = :accountId").setParameter("accountId", accountId);
         return query.getResultList();
     }
 

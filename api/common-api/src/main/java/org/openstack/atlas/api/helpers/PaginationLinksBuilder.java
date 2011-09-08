@@ -21,7 +21,7 @@ public class PaginationLinksBuilder {
         List<Link> links = new ArrayList<Link>();
         if (!paginatedObjectIds.isEmpty()) {
             if (marker == null) marker = HARD_MARKER;
-            if (marker >= allObjectIds.get(allObjectIds.size() - 1) || allObjectIds.size() == paginatedObjectIds.size()) NEXT = false;
+                if (marker >= allObjectIds.get(allObjectIds.size() - 1) || allObjectIds.size() == paginatedObjectIds.size()) NEXT = false;
             if (marker <= allObjectIds.get(0)) PREVIOUS = false;
 
             if (NEXT) {
