@@ -14,10 +14,11 @@ public class PaginationLinksBuilder {
 //    private final static String SELF = "self";
 //    private final static Integer HARD_LIMIT = 100;
     private final static Integer HARD_MARKER = 0;
-    private static Boolean PREVIOUS = true;
-    private static Boolean NEXT = true;
 
     public static List<Link> buildLinks(UriInfo uriInfo, List<Integer> allObjectIds, List<Integer> paginatedObjectIds, Integer limit, Integer marker) throws UnexpectedException {
+        boolean PREVIOUS = true;
+        boolean NEXT = true;
+
         List<Link> links = new ArrayList<Link>();
         if (!paginatedObjectIds.isEmpty()) {
             if (marker == null) marker = HARD_MARKER;
