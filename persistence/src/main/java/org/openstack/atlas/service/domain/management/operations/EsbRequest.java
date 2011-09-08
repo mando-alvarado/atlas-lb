@@ -139,9 +139,9 @@ public class EsbRequest implements Serializable {
     }
 
     public org.openstack.atlas.docs.loadbalancers.api.management.v1.LoadBalancer getMgmtLoadBalancer() {
-        if (mLoadBalancer == null) {
+//        if (mLoadBalancer == null) {
             mLoadBalancer = new org.openstack.atlas.docs.loadbalancers.api.management.v1.LoadBalancer();
-        }
+//        }
         return mLoadBalancer;
     }
 

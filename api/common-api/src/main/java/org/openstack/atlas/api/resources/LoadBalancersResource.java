@@ -2,7 +2,7 @@ package org.openstack.atlas.api.resources;
 
 
 import org.apache.abdera.model.Feed;
-import org.openstack.atlas.api.helpers.LinkageUriBuilder;
+import org.openstack.atlas.api.helpers.PaginationLinksBuilder;
 import org.openstack.atlas.api.helpers.ResponseFactory;
 import org.openstack.atlas.api.mapper.DomainToRestModel;
 import org.openstack.atlas.api.repository.ValidatorRepository;
@@ -46,7 +46,7 @@ public class LoadBalancersResource extends CommonDependencyProvider {
 
     @GET
     @Produces({APPLICATION_XML, APPLICATION_JSON, APPLICATION_ATOM_XML})
-    public Response retrieveLoadBalancers(@Context UriInfo uriInfo, @QueryParam("status") String status, @QueryParam("offset") Integer offset, @QueryParam("limit") Integer limit, @QueryParam("marker") Integer marker, @QueryParam("page") Integer page, @QueryParam("changes-since") String changedSince) {
+    public Response retrieveLoadBalancers(@QueryParam("status") String status, @QueryParam("offset") Integer offset, @QueryParam("limit") Integer limit, @QueryParam("marker") Integer marker, @QueryParam("page") Integer page, @QueryParam("changes-since") String changedSince) {
         if (requestHeaders.getRequestHeader("Accept").get(0).equals(APPLICATION_ATOM_XML)) {
             return getFeedResponse(page);
         }
@@ -57,16 +57,15 @@ public class LoadBalancersResource extends CommonDependencyProvider {
         LbQueryStatus qs = null;
 
         try {
+            //TODO: these query items need to be handled in the Pagination class...
             if (status != null) {
                 qs = LbQueryStatus.INCLUDE;
             } else {
                 qs = LbQueryStatus.EXCLUDE;
                 status = "DELETED";
             }
-
-            if (changedSince != null) {
-                changedCal = isoTocal(changedSince);
-            }
+            if (changedSince != null) changedCal = isoTocal(changedSince);
+            if (limit == null || limit < 0 || limit > 100) limit = 100;
 
             domainLbs = loadBalancerService.getLoadbalancersGeneric(accountId, status, qs, changedCal, offset, limit, marker);
             List<Integer> loadBalancerIds = loadBalancerService.getLoadBalancerIds(accountId);
@@ -78,7 +77,7 @@ public class LoadBalancersResource extends CommonDependencyProvider {
                 pagilbIds.add(domainLb.getId());
             }
 
-            dataModelLbs.setLinks(LinkageUriBuilder.buildLinks(uriInfo, loadBalancerIds, pagilbIds, limit, marker));
+            dataModelLbs.getLinks().addAll(PaginationLinksBuilder.buildLinks(getRequestStateContainer().getUriInfo(), loadBalancerIds, pagilbIds, limit, marker));
             return Response.status(200).entity(dataModelLbs).build();
         } catch (Exception e) {
             return ResponseFactory.getErrorResponse(e, null, null);

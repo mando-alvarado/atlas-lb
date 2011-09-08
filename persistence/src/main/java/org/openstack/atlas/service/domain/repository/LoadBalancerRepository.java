@@ -395,7 +395,7 @@ public class LoadBalancerRepository {
     public List<LoadBalancerJoinVip> getVipsByLoadBalancerId(Integer loadBalancerId) {
         List<LoadBalancerJoinVip> vips;
         String query = "select j from LoadBalancerJoinVip j where j.loadBalancer.id = :loadBalancerId";
-        //String query = "select l.virtualIps from LoadBalancer l where l.id = :loadBalancerId";
+//        String query = "select l.virtualIps from LoadBalancer l where l.id = :loadBalancerId";
         vips = entityManager.createQuery(query).setParameter("loadBalancerId", loadBalancerId).getResultList();
         return vips;
     }
@@ -407,7 +407,7 @@ public class LoadBalancerRepository {
         String format;
         CustomQuery customQuery;
         String message;
-        selectClause = "SELECT lb FROM LoadBalancer lb";
+        selectClause = "FROM LoadBalancer lb";
         String operation;
         String queryString;
         Query query;
@@ -415,16 +415,17 @@ public class LoadBalancerRepository {
 //        cq.addOrderdBy("lb.id", "desc");
 
         // Trying to make the first element in the return list be the "prev" link element
-        if (marker != null) {
-            String firstQuery = "SELECT lb FROM LoadBalancer lb WHERE lb.accountId = :account AND lb.id <= :marker ORDER BY id DESC";
-            lbs.addAll(entityManager.createQuery(firstQuery).setParameter("account", accountId).setParameter("marker", marker).setFirstResult(limit).setMaxResults(1).getResultList());
-            if (lbs.size() < 1) {
-                lbs.add(new LoadBalancer());
-            }
-        } else {
-            marker = 0;
-        }
+//        if (marker != null) {
+//            String firstQuery = "SELECT lb FROM LoadBalancer lb WHERE lb.accountId = :account AND lb.id <= :marker ORDER BY id DESC";
+//            lbs.addAll(entityManager.createQuery(firstQuery).setParameter("account", accountId).setParameter("marker", marker).setFirstResult(limit).setMaxResults(1).getResultList());
+//            if (lbs.size() < 1) {
+//                lbs.add(new LoadBalancer());
+//            }
+//        } else {
+//            marker = 0;
+//        }
 
+        if (marker == null) marker = 0;
         if (accountId != null) {
             customQuery.addParam("lb.accountId", "=", "accountId", accountId);
         }
@@ -465,7 +466,7 @@ public class LoadBalancerRepository {
         }
 
         if (limit != null) {
-            customQuery.setLimit(limit);
+            customQuery.setLimit(limit );
             query.setMaxResults(customQuery.getLimit());
         }
 
@@ -474,8 +475,8 @@ public class LoadBalancerRepository {
             query.setFirstResult(customQuery.getOffset());
         }
 
-        lbs.addAll(query.getResultList());
-//      was: lbs = query.getResultList();
+//        lbs.addAll(query.getResultList());
+      lbs = query.getResultList();
 
         return lbs;
     }

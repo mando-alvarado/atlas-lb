@@ -9,12 +9,18 @@
             jaxb:extensionBindingPrefixes="xjc">
 
 
-    <xsd:element name="links" type="tns:links"/>
-    <xsd:complexType name="links">
-        <xsd:sequence>
-            <xsd:element name="link" type="tns:link" minOccurs="0" maxOccurs="unbounded"/>
-        </xsd:sequence>
-    </xsd:complexType>
+    <!--<xsd:element name="links" type="tns:links"/>-->
+    <!--<xsd:complexType name="links">-->
+    <!--<xsd:sequence>-->
+    <!--<xsd:element name="link" type="tns:link" minOccurs="0" maxOccurs="unbounded"/>-->
+    <!--</xsd:sequence>-->
+    <!--</xsd:complexType>-->
+
+    <!--<xsd:element name="link" type="tns:link"/>-->
+    <!--<xsd:complexType name="link">-->
+    <!--<xsd:attribute name="rel" type="xsd:string"/>-->
+    <!--<xsd:attribute name="href" type="xsd:string"/>-->
+    <!--</xsd:complexType>-->
 
     <xsd:element name="link" type="tns:link"/>
     <xsd:complexType name="link">

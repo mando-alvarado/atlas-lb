@@ -1,6 +1,7 @@
 package org.openstack.atlas.api.resources;
 
 import org.openstack.atlas.docs.loadbalancers.api.v1.Node;
+import org.openstack.atlas.docs.loadbalancers.api.v1.Nodes;
 import org.openstack.atlas.service.domain.entities.LoadBalancer;
 import org.openstack.atlas.service.domain.operations.Operation;
 import org.openstack.atlas.api.atom.FeedType;
@@ -58,7 +59,6 @@ public class NodeResource extends CommonDependencyProvider {
         try {
             node.setId(id);
             org.openstack.atlas.docs.loadbalancers.api.v1.LoadBalancer apiLb = new org.openstack.atlas.docs.loadbalancers.api.v1.LoadBalancer();
-
             apiLb.getNodes().add(node);
             LoadBalancer domainLb = dozerMapper.map(apiLb, LoadBalancer.class);
             domainLb.setId(loadBalancerId);

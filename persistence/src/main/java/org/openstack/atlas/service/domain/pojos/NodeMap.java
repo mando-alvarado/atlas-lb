@@ -38,6 +38,10 @@ public class NodeMap {
         return new HashSet<Integer>(nodeHashMap.keySet());
     }
 
+    public List<Integer> getIdsList() {
+        return new ArrayList<Integer>(nodeHashMap.keySet());
+    }
+
     public static List<Integer> setToSortedList(Set<Integer> ids){
         ArrayList arrayList = new ArrayList();
         for(Integer id : ids){

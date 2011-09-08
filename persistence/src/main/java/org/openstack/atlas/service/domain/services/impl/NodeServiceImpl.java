@@ -43,6 +43,13 @@ public class NodeServiceImpl extends BaseService implements NodeService {
 
     @Override
     @Transactional
+    public NodeMap getNodeIds(Integer accountId) throws EntityNotFoundException {
+        NodeMap nodes = nodeRepository.getNodeMapForAccount(accountId);
+        return nodes;
+    }
+
+    @Override
+    @Transactional
     public Node getNodeByAccountIdLoadBalancerIdNodeId(Integer aid, Integer lid, Integer nid) throws EntityNotFoundException, DeletedStatusException {
         Node node;
         node = nodeRepository.getNodeByAccountIdLoadBalancerIdNodeId(loadBalancerRepository.getByIdAndAccountId(lid, aid),nid);

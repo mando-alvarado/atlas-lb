@@ -11,14 +11,14 @@
 
     <xsd:import schemaLocation="global.xsd" namespace="http://docs.openstack.org/loadbalancers/api/global/v1.0"/>
 
-    <xsd:import schemaLocation="Atom.xsd" 
+    <xsd:import schemaLocation="Atom.xsd"
          namespace="http://www.w3.org/2005/Atom"/>
 
     <xsd:element name="loadBalancers">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="loadBalancer" type="tns:loadBalancer" minOccurs="0" maxOccurs="unbounded"/>
-                <xsd:element name="links" type="atom:links" minOccurs="0"/>
+                <xsd:element name="link" type="atom:link" minOccurs="0" maxOccurs="unbounded"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>

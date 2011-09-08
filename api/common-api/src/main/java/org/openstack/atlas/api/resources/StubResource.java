@@ -9,7 +9,6 @@ import org.openstack.atlas.docs.loadbalancers.api.v1.LoadBalancers;
 import org.openstack.atlas.docs.loadbalancers.api.v1.NetworkItem;
 import org.openstack.atlas.docs.loadbalancers.api.v1.AccessList;
 import java.util.ArrayList;
-import org.openstack.atlas.docs.loadbalancers.api.v1.Links;
 import org.openstack.atlas.docs.loadbalancers.api.v1.Link;
 import org.openstack.atlas.docs.loadbalancers.api.v1.Cluster;
 import org.openstack.atlas.docs.loadbalancers.api.v1.LoadBalancer;
@@ -100,12 +99,10 @@ public class StubResource extends CommonDependencyProvider {
     @Path("uri")
     public Response uriInfo(){
         String uri = getRequestStateContainer().getUriInfo().getAbsolutePath().toString();
-        Links links = new Links();
         Link link = new Link();
         link.setHref(uri);
         link.setRel("testRelation");
-        links.getLinks().add(link);
-        return Response.status(200).entity(links).build();
+        return Response.status(200).entity(link).build();
     }
 
     @GET
@@ -216,6 +213,7 @@ public class StubResource extends CommonDependencyProvider {
 
     private LoadBalancer newLoadBalancer(Integer id, String name) {
         List<Node> nodes = new ArrayList<Node>();
+        Nodes nodes1 = new Nodes();
         List<VirtualIp> vips = new ArrayList<VirtualIp>();
         List<NetworkItem> accessList = new ArrayList<NetworkItem>();
         LoadBalancer lb = new LoadBalancer();
@@ -244,6 +242,7 @@ public class StubResource extends CommonDependencyProvider {
         lb.setUpdated(updated);
         nodes.add(newNode(1, 80, "127.0.0.10"));
         nodes.add(newNode(1, 443, "127.0.0.20"));
+        nodes1.getNodes().addAll(nodes);
         vips.add(newVip(1, "127.0.0.1"));
         vips.add(newVip(2, "127.0.0.2"));
         lb.setVirtualIps(vips);

@@ -20,6 +20,8 @@ import org.mockito.Matchers;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -38,6 +40,8 @@ public class NodesResourceTest {
         private AsyncService asyncService;
         private NodesResource nodesResource;
         private NodeService nodeService;
+        private UriInfo uriInfo;
+        private  UriBuilder uriBuilder;
 
         @Before
         public void setUp() throws EntityNotFoundException, DeletedStatusException {
@@ -48,6 +52,10 @@ public class NodesResourceTest {
             nodesResource.setRequestHeaders(requestHeaders);
             nodesResource.setAsyncService(asyncService);
             nodesResource.setNodeService(nodeService);
+
+            uriInfo = mock(UriInfo.class);
+            uriBuilder = UriBuilder.fromUri("http://127.0.1.1/pub/v1.0/test/loadbalancers?marker=0&limit=1");
+            when(uriInfo.getAbsolutePathBuilder()).thenReturn(uriBuilder);
 
             List<String> mappingFiles = new ArrayList<String>();
             mappingFiles.add("loadbalancing-dozer-mapping.xml");

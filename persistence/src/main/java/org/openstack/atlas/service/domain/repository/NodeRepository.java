@@ -1,5 +1,6 @@
 package org.openstack.atlas.service.domain.repository;
 
+import org.openstack.atlas.docs.loadbalancers.api.v1.Nodes;
 import org.openstack.atlas.service.domain.entities.*;
 import org.openstack.atlas.service.domain.exceptions.DeletedStatusException;
 import org.openstack.atlas.service.domain.exceptions.EntityNotFoundException;
@@ -39,12 +40,19 @@ public class NodeRepository {
         return newNodes;
     }
 
- public LoadBalancer delNodes(LoadBalancer lb, Collection<Node> nodes) {
+
+    public List<Integer> getNodeIds(Integer accountId) {
+        List<Integer> nodes = new ArrayList<Integer>();
+        return (List<Integer>) entityManager.createQuery("select n.id from Node n where n.loadbalancer.account.id = :aid").setParameter("aid", accountId);
+
+    }
+
+    public LoadBalancer delNodes(LoadBalancer lb, Collection<Node> nodes) {
         NodeMap nodeMap = new NodeMap(nodes);
         Set<Node> lbNodes = new HashSet<Node>(lb.getNodes());
-        for(Node node : lbNodes){
+        for (Node node : lbNodes) {
             Integer nodeId = node.getId();
-            if(nodeMap.containsKey(nodeId)){
+            if (nodeMap.containsKey(nodeId)) {
                 lb.getNodes().remove(node);
             }
         }
@@ -75,6 +83,18 @@ public class NodeRepository {
         for (Node node : nodes) {
             nodeMap.addNode(node);
 
+        }
+        return nodeMap;
+    }
+
+    public NodeMap getNodeMapForAccount(Integer accountId) {
+        List<Node> nodes;
+        NodeMap nodeMap = new NodeMap();
+        String qStr = "from Node n where n.loadbalancer.accountId=:aid";
+        Query q = entityManager.createQuery(qStr).setParameter("aid", accountId);
+        nodes = q.getResultList();
+        for (Node node : nodes) {
+            nodeMap.addNode(node);
         }
         return nodeMap;
     }
@@ -116,7 +136,7 @@ public class NodeRepository {
     }
 
     public Node getNodeByAccountIdLoadBalancerIdNodeId(LoadBalancer loadBalancer,
-            Integer nid) throws EntityNotFoundException, DeletedStatusException {
+                                                       Integer nid) throws EntityNotFoundException, DeletedStatusException {
         if (loadBalancer.getStatus().equals(LoadBalancerStatus.DELETED)) {
             throw new DeletedStatusException("The loadbalancer is marked as deleted.");
         }
@@ -131,7 +151,7 @@ public class NodeRepository {
     }
 
     public Set<Node> getNodesByAccountIdLoadBalancerId(LoadBalancer loadBalancer,
-            Integer... p) throws EntityNotFoundException, DeletedStatusException {
+                                                       Integer... p) throws EntityNotFoundException, DeletedStatusException {
         if (loadBalancer.getStatus().equals(LoadBalancerStatus.DELETED)) {
             throw new DeletedStatusException("The loadbalancer is marked as deleted.");
         }

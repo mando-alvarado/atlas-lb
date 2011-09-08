@@ -1,17 +1,14 @@
 package org.openstack.atlas.api.resources;
 
-import org.openstack.atlas.service.domain.services.impl.NodeServiceImpl;
-import java.util.Collections;
+import org.openstack.atlas.api.helpers.PaginationLinksBuilder;
 
-import org.openstack.atlas.docs.loadbalancers.api.management.v1.ListOfInts;
+import java.util.*;
+
 import org.openstack.atlas.service.domain.pojos.NodeMap;
-import java.util.List;
 import org.openstack.atlas.docs.loadbalancers.api.v1.Nodes;
-import org.openstack.atlas.service.domain.entities.AccountLimitType;
 import org.openstack.atlas.service.domain.entities.LoadBalancer;
 import org.openstack.atlas.service.domain.entities.LoadBalancerStatus;
 import org.openstack.atlas.service.domain.entities.Node;
-import org.openstack.atlas.service.domain.entities.NodeCondition;
 import org.openstack.atlas.service.domain.exceptions.ImmutableEntityException;
 import org.openstack.atlas.service.domain.operations.Operation;
 import org.openstack.atlas.service.domain.pojos.MessageDataContainer;
@@ -22,15 +19,13 @@ import org.openstack.atlas.api.repository.ValidatorRepository;
 import org.openstack.atlas.api.resources.providers.CommonDependencyProvider;
 import org.openstack.atlas.api.validation.context.HttpRequestType;
 import org.openstack.atlas.api.validation.results.ValidatorResult;
-import org.openstack.atlas.util.converters.StringConverter;
 import org.apache.abdera.model.Feed;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import javax.ws.rs.core.UriInfo;
 
 import static javax.ws.rs.core.MediaType.*;
 
@@ -53,9 +48,18 @@ public class NodesResource extends CommonDependencyProvider {
         try {
             dnodes = nodeService.getNodesByAccountIdLoadBalancerId(getAccountId(), getLoadBalancerId(), offset, limit, marker);
             dnodes = LoadBalancerProperties.setWeightsforNodes(dnodes);
+
+//            List<Integer> paginatedIds = new ArrayList<Integer>();
+//            NodeMap nodeMap;
             for (org.openstack.atlas.service.domain.entities.Node dnode : dnodes) {
                 rnodes.getNodes().add(dozerMapper.map(dnode, org.openstack.atlas.docs.loadbalancers.api.v1.Node.class));
+                //Populate the id list
+//                paginatedIds.add(dnode.getId());
             }
+
+//            nodeMap = nodeService.getNodeIds(accountId);
+//            rnodes.getLinks().addAll(PaginationLinksBuilder.buildLinks(getRequestStateContainer().getUriInfo(), nodeMap.getIdsList(), paginatedIds, limit, marker));
+
             return Response.status(200).entity(rnodes).build();
         } catch (Exception e) {
             return ResponseFactory.getErrorResponse(e, null, null);
