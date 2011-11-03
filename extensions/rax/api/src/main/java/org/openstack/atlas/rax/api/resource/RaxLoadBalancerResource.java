@@ -1,6 +1,5 @@
 package org.openstack.atlas.rax.api.resource;
 
-import org.openstack.atlas.api.resource.ConnectionThrottleResource;
 import org.openstack.atlas.api.response.ResponseFactory;
 import org.openstack.atlas.api.validation.context.HttpRequestType;
 import org.openstack.atlas.api.validation.result.ValidatorResult;
@@ -20,6 +19,9 @@ import javax.ws.rs.core.Response;
 @Controller
 @Scope("request")
 public class RaxLoadBalancerResource extends org.openstack.atlas.api.resource.LoadBalancerResource {
+
+    @Autowired
+    protected RaxAccessListResource raxAccessListResource;
 
     @Override
     public Response get() {
@@ -56,5 +58,13 @@ public class RaxLoadBalancerResource extends org.openstack.atlas.api.resource.Lo
         } catch (Exception e) {
             return ResponseFactory.getErrorResponse(e, null, null);
         }
+    }
+
+    @Path("accesslist")
+    public RaxAccessListResource retrieveAccessListResource() {
+//        accessListResource.setRequestHeaders(requestHeaders);
+        raxAccessListResource.setAccountId(accountId);
+        raxAccessListResource.setLoadBalancerId(id);
+        return raxAccessListResource;
     }
 }
