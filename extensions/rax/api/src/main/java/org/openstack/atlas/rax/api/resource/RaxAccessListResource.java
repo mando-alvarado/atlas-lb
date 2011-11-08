@@ -3,7 +3,7 @@ package org.openstack.atlas.rax.api.resource;
 import org.openstack.atlas.api.resource.provider.CommonDependencyProvider;
 import org.openstack.atlas.api.response.ResponseFactory;
 import org.openstack.atlas.api.v1.extensions.rax.AccessList;
-//import org.openstack.atlas.api.v1.extensions.rax.NetworkItem;
+import org.openstack.atlas.api.v1.extensions.rax.NetworkItem;
 import org.openstack.atlas.api.validation.context.HttpRequestType;
 import org.openstack.atlas.api.validation.result.ValidatorResult;
 import org.openstack.atlas.rax.api.validation.validator.AccessListValidator;
@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-//import java.util.List;
+import java.util.List;
 
 import static javax.ws.rs.core.MediaType.*;
 
@@ -20,17 +20,17 @@ public class RaxAccessListResource extends CommonDependencyProvider {
 
     @Autowired
     protected AccessListValidator validator;
-//    @Autowired
-//    protected AccessListService accessListService;
+    @Autowired
+    protected AccessListService accessListService;
     protected Integer accountId;
     protected Integer loadBalancerId;
 
     @GET
     @Produces({APPLICATION_XML, APPLICATION_JSON, APPLICATION_ATOM_XML})
     public Response retrieveAccessList(@QueryParam("offset") Integer offset, @QueryParam("limit") Integer limit, @QueryParam("marker") Integer marker, @QueryParam("page") Integer page) {
-//        List<AccessList> daccessList;
+        List<AccessList> daccessList;
         AccessList raccessList = new AccessList();
-//        NetworkItem ni;
+        NetworkItem ni;
         try {
 
 //            daccessList = accessListService.getAccessListByAccountIdLoadBalancerId(accountId, loadBalancerId, offset, limit, marker);
