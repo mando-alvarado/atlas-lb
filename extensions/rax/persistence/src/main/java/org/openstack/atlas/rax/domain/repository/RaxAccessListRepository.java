@@ -6,7 +6,7 @@ import org.openstack.atlas.service.domain.exception.EntityNotFoundException;
 
 import java.util.List;
 
-public interface AccessListRepository {
+public interface RaxAccessListRepository {
 
     public AccessList getNetworkItemByAccountIdLoadBalancerIdNetworkItemId(Integer aid, Integer lid, Integer nid) throws EntityNotFoundException;
     public List<AccessList> getAccessListByAccountIdLoadBalancerId(int accountId, int loadbalancerId,Integer... p) throws EntityNotFoundException, DeletedStatusException;

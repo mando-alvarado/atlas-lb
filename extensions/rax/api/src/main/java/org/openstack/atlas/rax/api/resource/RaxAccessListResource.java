@@ -20,7 +20,7 @@ public class RaxAccessListResource extends CommonDependencyProvider {
     @Autowired
     protected AccessListValidator validator;
 //    @Autowired
-//    protected AccessListService accessListService;
+//    protected RaxAccessListService accessListService;
     protected Integer accountId;
     protected Integer loadBalancerId;
 

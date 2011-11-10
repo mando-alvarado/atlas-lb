@@ -1,7 +1,7 @@
 package org.openstack.atlas.rax.domain.repository.impl;
 
 import org.openstack.atlas.rax.domain.entity.AccessList;
-import org.openstack.atlas.rax.domain.repository.AccessListRepository;
+import org.openstack.atlas.rax.domain.repository.RaxAccessListRepository;
 import org.openstack.atlas.service.domain.entity.LoadBalancer;
 import org.openstack.atlas.service.domain.exception.DeletedStatusException;
 import org.openstack.atlas.service.domain.exception.EntityNotFoundException;
@@ -11,7 +11,7 @@ import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccessListRepositoryImpl implements AccessListRepository {
+public class RaxRaxAccessListRepositoryImpl implements RaxAccessListRepository {
 
     private EntityManager entityManager;
     private RaxLoadBalancerRepositoryImpl loadBalancerRepository;
