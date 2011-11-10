@@ -15,7 +15,6 @@ import java.util.List;
 
 import static javax.ws.rs.core.MediaType.*;
 
-
 public class RaxAccessListResource extends CommonDependencyProvider {
 
     @Autowired
@@ -33,7 +32,7 @@ public class RaxAccessListResource extends CommonDependencyProvider {
         NetworkItem ni;
         try {
 
-//            daccessList = accessListService.getAccessListByAccountIdLoadBalancerId(accountId, loadBalancerId, offset, limit, marker);
+            daccessList = accessListService.getAccessListByAccountIdLoadBalancerId(accountId, loadBalancerId, offset, limit, marker);
 //            for (org.openstack.atlas.service.domain.entities.AccessList accessListItem : daccessList) {
 //                raccessList.getNetworkItems().add(dozerMapper.map(accessListItem, NetworkItem.class));
 //            }
