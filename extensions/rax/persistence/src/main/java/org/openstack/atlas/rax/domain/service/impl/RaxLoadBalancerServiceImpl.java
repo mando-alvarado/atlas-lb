@@ -1,10 +1,9 @@
-package org.openstack.atlas.rax.domain.service;
+package org.openstack.atlas.rax.domain.service.impl;
 
 import org.openstack.atlas.datamodel.CoreProtocolType;
 import org.openstack.atlas.rax.domain.entity.RaxLoadBalancer;
 import org.openstack.atlas.service.domain.common.ErrorMessages;
 import org.openstack.atlas.service.domain.entity.LoadBalancer;
-import org.openstack.atlas.service.domain.entity.SessionPersistence;
 import org.openstack.atlas.service.domain.exception.BadRequestException;
 import org.openstack.atlas.service.domain.service.impl.LoadBalancerServiceImpl;
 import org.springframework.context.annotation.Primary;
