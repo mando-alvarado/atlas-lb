@@ -1,5 +1,6 @@
 package org.openstack.atlas.rax.api.resource;
 
+import org.openstack.atlas.api.resource.LoadBalancerResource;
 import org.openstack.atlas.api.response.ResponseFactory;
 import org.openstack.atlas.api.validation.context.HttpRequestType;
 import org.openstack.atlas.api.validation.result.ValidatorResult;
@@ -18,7 +19,7 @@ import javax.ws.rs.core.Response;
 @Primary
 @Controller
 @Scope("request")
-public class RaxLoadBalancerResource extends org.openstack.atlas.api.resource.LoadBalancerResource {
+public class RaxLoadBalancerResource extends LoadBalancerResource {
 
     @Autowired
     protected RaxAccessListResource raxAccessListResource;
