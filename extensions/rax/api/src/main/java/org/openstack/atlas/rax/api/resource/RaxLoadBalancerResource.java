@@ -23,6 +23,8 @@ public class RaxLoadBalancerResource extends LoadBalancerResource {
 
     @Autowired
     protected RaxAccessListResource raxAccessListResource;
+    @Autowired
+    protected RaxConnectionLoggingResource connectionLoggingResource;
 
     @Override
     public Response get() {
@@ -34,7 +36,6 @@ public class RaxLoadBalancerResource extends LoadBalancerResource {
             return ResponseFactory.getErrorResponse(e);
         }
     }
-
 
     @Override
     public Response update(LoadBalancer loadBalancer) {
@@ -67,5 +68,12 @@ public class RaxLoadBalancerResource extends LoadBalancerResource {
         raxAccessListResource.setAccountId(accountId);
         raxAccessListResource.setLoadBalancerId(id);
         return raxAccessListResource;
+    }
+
+    @Path("connectionlogging")
+    public RaxConnectionLoggingResource retrieveConnectionLoggingResource() {
+        connectionLoggingResource.setAccountId(accountId);
+        connectionLoggingResource.setLoadBalancerId(id);
+        return connectionLoggingResource;
     }
 }
