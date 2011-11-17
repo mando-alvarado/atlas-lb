@@ -5,16 +5,24 @@ import org.openstack.atlas.rax.domain.repository.RaxAccessListRepository;
 import org.openstack.atlas.service.domain.entity.LoadBalancer;
 import org.openstack.atlas.service.domain.exception.DeletedStatusException;
 import org.openstack.atlas.service.domain.exception.EntityNotFoundException;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+@Primary
+@Repository
+@Transactional
 public class RaxAccessListRepositoryImpl implements RaxAccessListRepository {
 
+    @PersistenceContext(unitName = "loadbalancing")
     private EntityManager entityManager;
-    private RaxLoadBalancerRepositoryImpl loadBalancerRepository;
+    private RaxLoadBalancerRepositoryImpl loadBalancerRepository = new RaxLoadBalancerRepositoryImpl();
 
     public AccessList getNetworkItemByAccountIdLoadBalancerIdNetworkItemId(Integer aid, Integer lid, Integer nid) throws EntityNotFoundException {
         List<AccessList> al = null;
@@ -31,13 +39,13 @@ public class RaxAccessListRepositoryImpl implements RaxAccessListRepository {
         q.setMaxResults(1);
         al = q.getResultList();
         if (al.size() != 1) {
-            throw new EntityNotFoundException("Node not nound");
+            throw new EntityNotFoundException("Node not found");
         }
         return al.get(0);
     }
 
-    public List<AccessList> getAccessListByAccountIdLoadBalancerId(int accountId,
-                                int loadbalancerId,Integer... p) throws EntityNotFoundException, DeletedStatusException {
+    public List<AccessList> getAccessListByAccountIdLoadBalancerId(int accountId, int loadbalancerId, Integer offset,
+                                Integer limit, Integer marker) throws EntityNotFoundException, DeletedStatusException {
         LoadBalancer lb = loadBalancerRepository.getByIdAndAccountId(loadbalancerId, accountId);
         List<AccessList> accessList = new ArrayList<AccessList>();
         if (lb.getStatus().equals("DELETED")) {
@@ -46,22 +54,18 @@ public class RaxAccessListRepositoryImpl implements RaxAccessListRepository {
         Query query = entityManager.createQuery("FROM AccessList a WHERE a.loadbalancer.id = :lid AND a.loadbalancer.accountId = :aid")
                 .setParameter("lid", loadbalancerId).setParameter("aid", accountId);
 
-        if (p.length >= 3) {
-            Integer offset = p[0];
-            Integer limit = p[1];
-            Integer marker = p[2];
-            if (offset == null) {
-                offset = 0;
-            }
-            if (limit == null || limit > 100) {
-                limit = 100;
-            }
-            if (marker != null) {
-                query = entityManager.createQuery("FROM AccessList a WHERE a.loadbalancer.id = :lid AND a.loadbalancer.accountId = :aid AND a.id >= :accessId")
-                        .setParameter("lid", loadbalancerId).setParameter("aid", accountId).setParameter("accessId", marker);
-            }
-            query = query.setFirstResult(offset).setMaxResults(limit);
+        if (offset == null) {
+            offset = 0;
         }
+        if (limit == null || limit > 100) {
+            limit = 100;
+        }
+        if (marker != null) {
+            query = entityManager.createQuery("FROM AccessList a WHERE a.loadbalancer.id = :lid AND a.loadbalancer.accountId = :aid AND a.id >= :accessId")
+                    .setParameter("lid", loadbalancerId).setParameter("aid", accountId).setParameter("accessId", marker);
+        }
+        query = query.setFirstResult(offset).setMaxResults(limit);
+
         accessList = query.getResultList();
         return accessList;
 

@@ -15,7 +15,7 @@ import java.util.Set;
 @Service
 public interface RaxAccessListService {
 
-    public List<AccessList> getAccessListByAccountIdLoadBalancerId(int accountId, int loadbalancerId, Integer... p) throws EntityNotFoundException, DeletedStatusException, org.openstack.atlas.service.domain.exception.EntityNotFoundException;
+    public List<AccessList> getAccessListByAccountIdLoadBalancerId(int accountId, int loadbalancerId, Integer offset, Integer limit, Integer marker) throws EntityNotFoundException, DeletedStatusException, org.openstack.atlas.service.domain.exception.EntityNotFoundException;
 
     public LoadBalancer markForDeletionNetworkItems(LoadBalancer returnLB, List<Integer> networkItemIds) throws BadRequestException, EntityNotFoundException, ImmutableEntityException;
 

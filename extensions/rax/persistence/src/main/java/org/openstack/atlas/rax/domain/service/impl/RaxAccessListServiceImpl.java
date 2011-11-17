@@ -17,32 +17,32 @@ public class RaxAccessListServiceImpl implements RaxAccessListService {
     @Autowired
     private RaxAccessListRepository accessListRepository;
 
-    @Override
-    public List<AccessList> getAccessListByAccountIdLoadBalancerId(int accountId, int loadbalancerId, Integer... p) throws EntityNotFoundException, DeletedStatusException {
-        return accessListRepository.getAccessListByAccountIdLoadBalancerId(accountId, loadbalancerId);
+//    @Override
+    public List<AccessList> getAccessListByAccountIdLoadBalancerId(int accountId, int loadbalancerId, Integer offset, Integer limit, Integer marker) throws EntityNotFoundException, DeletedStatusException {
+        return accessListRepository.getAccessListByAccountIdLoadBalancerId(accountId, loadbalancerId, offset, limit, marker);
     }
 
-    @Override
+//    @Override
     public LoadBalancer markForDeletionNetworkItems(LoadBalancer returnLB, List<Integer> networkItemIds) throws BadRequestException, ImmutableEntityException {
         return null;
     }
 
-    @Override
+//    @Override
     public LoadBalancer updateAccessList(LoadBalancer rLb) throws ImmutableEntityException, BadRequestException, UnprocessableEntityException {
         return null;
     }
 
-    @Override
+//    @Override
     public Set<AccessList> diffRequestAccessListWithDomainAccessList(LoadBalancer rLb, org.openstack.atlas.service.domain.entity.LoadBalancer dLb) {
         return null;
     }
 
-    @Override
+//    @Override
     public LoadBalancer markForDeletionAccessList(LoadBalancer rLb) throws ImmutableEntityException, DeletedStatusException, UnprocessableEntityException {
         return null;
     }
 
-    @Override
+//    @Override
     public LoadBalancer markForDeletionNetworkItem(LoadBalancer rLb) throws ImmutableEntityException {
         return null;
     }
