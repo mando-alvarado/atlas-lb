@@ -11,7 +11,7 @@ import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RaxRaxAccessListRepositoryImpl implements RaxAccessListRepository {
+public class RaxAccessListRepositoryImpl implements RaxAccessListRepository {
 
     private EntityManager entityManager;
     private RaxLoadBalancerRepositoryImpl loadBalancerRepository;
