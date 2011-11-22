@@ -7,8 +7,12 @@ import org.openstack.atlas.api.v1.extensions.rax.NetworkItem;
 import org.openstack.atlas.api.validation.context.HttpRequestType;
 import org.openstack.atlas.api.validation.result.ValidatorResult;
 import org.openstack.atlas.rax.api.validation.validator.AccessListValidator;
+import org.openstack.atlas.rax.domain.entity.RaxAccessList;
 import org.openstack.atlas.rax.domain.service.RaxAccessListService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -17,7 +21,9 @@ import java.util.List;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 
-
+@Primary
+@Controller
+@Scope("request")
 public class RaxAccessListResource extends CommonDependencyProvider {
 
     @Autowired
@@ -30,11 +36,11 @@ public class RaxAccessListResource extends CommonDependencyProvider {
     @GET
     @Produces({APPLICATION_XML, APPLICATION_JSON})
     public Response retrieveAccessList(@QueryParam("offset") Integer offset, @QueryParam("limit") Integer limit, @QueryParam("marker") Integer marker, @QueryParam("page") Integer page) {
-        List<org.openstack.atlas.rax.domain.entity.AccessList> daccessList;
+        List<RaxAccessList> daccessList;
         AccessList raccessList = new AccessList();
         try {
             daccessList = accessListService.getAccessListByAccountIdLoadBalancerId(accountId, loadBalancerId, offset, limit, marker);
-            for (org.openstack.atlas.rax.domain.entity.AccessList accessListItem : daccessList) {
+            for (RaxAccessList accessListItem : daccessList) {
                 raccessList.getNetworkItems().add(dozerMapper.map(accessListItem, NetworkItem.class));
             }
             return Response.status(200).entity(raccessList).build();
@@ -89,8 +95,8 @@ public class RaxAccessListResource extends CommonDependencyProvider {
 //            return Response.status(Response.Status.ACCEPTED).build();
 //        } else if (networkItemIds.size() <= size) {
 //            try {
-//                Set<org.openstack.atlas.service.domain.entities.AccessList> accessLists = new HashSet<org.openstack.atlas.service.domain.entities.AccessList>();
-//                org.openstack.atlas.service.domain.entities.AccessList aList = new org.openstack.atlas.service.domain.entities.AccessList();
+//                Set<org.openstack.atlas.service.domain.entities.RaxAccessList> accessLists = new HashSet<org.openstack.atlas.service.domain.entities.RaxAccessList>();
+//                org.openstack.atlas.service.domain.entities.RaxAccessList aList = new org.openstack.atlas.service.domain.entities.RaxAccessList();
 //                accessLists.add(aList);
 //                returnLB.setId(loadBalancerId);
 //                returnLB.setAccountId(accountId);

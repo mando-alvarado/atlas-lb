@@ -9,7 +9,7 @@ import org.openstack.atlas.api.validation.validator.ResourceValidator;
 import org.openstack.atlas.api.validation.validator.ValidatorUtilities;
 import org.openstack.atlas.api.validation.verifier.IsInstanceOf;
 import org.openstack.atlas.core.api.v1.ConnectionThrottle;
-import org.openstack.atlas.rax.domain.entity.AccessList;
+import org.openstack.atlas.rax.domain.entity.RaxAccessList;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
