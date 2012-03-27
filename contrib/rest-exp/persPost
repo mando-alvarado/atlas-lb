@@ -1,0 +1,26 @@
+#!/usr/bin/env jython
+from util import *
+import org.openstack.atlas.restclients.dns.objects.CustomObjects as CO
+import util
+import sys
+import os
+
+ep = "http://127.0.0.1:5555"
+uri = "/some/data"
+at = "text/plain"
+ct = "text/plain"
+n = 5
+
+objList = []
+
+for i in xrange(0,n):
+    #obj = CO.RootElementDnsFault()
+    #obj.setMessage("pfft %i"%i)
+    #obj.setDetails("Don't make me laugh")
+    #obj.setCode(200)
+    objList.append("WTF")
+
+tc = TestClient(ep)
+
+tc.testPost(uri,at,ct,objList)     #Works but not useing multiple requests
+tc.testApache(uri,at,ct,objList)   #Fails period
