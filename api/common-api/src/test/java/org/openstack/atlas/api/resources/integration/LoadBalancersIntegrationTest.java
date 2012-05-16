@@ -1,11 +1,11 @@
 package org.openstack.atlas.api.resources.integration;
 
-import org.junit.*;
-import org.openstack.atlas.docs.loadbalancers.api.v1.LoadBalancers;
 import com.sun.grizzly.http.SelectorThread;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.DefaultClientConfig;import javax.ws.rs.core.UriBuilder;import java.io.IOException;import java.net.URI;import java.util.HashMap;import java.util.Map;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
+import org.junit.*;
+import org.openstack.atlas.docs.loadbalancers.api.v1.LoadBalancers;
 
 public class LoadBalancersIntegrationTest {
 
